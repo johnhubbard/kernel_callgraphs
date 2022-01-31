@@ -1,0 +1,65 @@
+{
+    "items": [
+        { "name": "vfs_iter_write", "child": "do_iter_write" },
+        { "name": "do_iter_write", "child": "filp->f_ops->write_iter" },
+        { "name": "filp->f_ops->write_iter", "child": "generic_file_write_iter" },
+        { "name": "filp->f_ops->write_iter", "child": "__iomap_dio_rw" },
+        { "name": "__iomap_dio_rw", "child": "iomap_dio_iter", "color": "yellow" },
+        { "name": "iomap_dio_iter", "child": "iomap_dio_bio_iter", "color": "yellow" },
+        { "name": "iomap_dio_bio_iter", "child": "iomap_dio_zero", "color": "yellow" },
+        { "name": "iomap_dio_zero", "child": "get_page(ZERO_PAGE)", "color": "yellow" },
+
+		{ "name": "generic_file_write_iter", "child": "generic_file_direct_write" },
+        { "name": "generic_file_direct_write", "child": "mapping->a_ops->direct_IO" },
+        { "name": "mapping->a_ops->direct_IO", "child": "affs_direct_IO, ...etc\n(many filesystems)" },
+        { "name": "affs_direct_IO, ...etc\n(many filesystems)", "child": "blockdev_direct_IO" },
+        { "name": "blockdev_direct_IO", "child": "__blockdev_direct_IO" },
+        { "name": "__blockdev_direct_IO", "child": "do_blockdev_direct_IO" },
+        { "name": "do_blockdev_direct_IO", "child": "do_direct_IO" },
+        { "name": "do_blockdev_direct_IO", "child": "dio_zero_block" },
+        { "name": "do_direct_IO", "child": "dio_get_page" },
+
+        { "name": "dio_get_page", "child": "dio_refill_pages" },
+        { "name": "dio_refill_pages", "child": "get_page(ZERO_PAGE)" },
+        { "name": "dio_refill_pages", "child": "iov_iter_get_pages" },
+        { "name": "iov_iter_get_pages", "child": "get_page_pages_fast" },
+
+        { "name": "block_device_operations->ioctl", "child": "blk_rq_map_user_iov" },
+        { "name": "blk_rq_map_user_iov", "child": "bio_map_user_iov" },
+		{ "name": "bio_map_user_iov", "child": "iov_iter_get_pages_alloc" },
+		{ "name": "iov_iter_get_pages_alloc", "child": "get_page_pages_fast" },
+
+        { "name": "do_direct_IO", "child": "dio_zero_block" },
+        { "name": "dio_zero_block", "child": "get_page(ZERO_PAGE)" },
+        { "name": "get_page(ZERO_PAGE)", "child": "bio_vec pool", "color": "deeppink" },
+        { "name": "get_page_pages_fast", "child": "bio_vec pool", "color": "deeppink" },
+
+		{ "name": "bio_iov_iter_get_pages",
+		  "parents": [
+				"__blkdev_direct_IO_simple",
+				"__blkdev_direct_IO",
+				"__blkdev_direct_IO_async",
+				"zonefs_file_dio_append",
+				"iomap_dio_bio_iter"
+		  ],
+		  "child": "__bio_iov_iter_get_pages"
+		},
+
+        { "name": "__bio_iov_iter_get_pages", "child": "iov_iter_get_pages" },
+        { "name": "__iter_get_bvecs, etc\n(many routines)", "child": "iov_iter_get_pages" },
+
+        { "name": "ceph_netfs_issue_op, etc\n(many routines)", "child": "iov_iter_get_pages_alloc" },
+
+        { "name": "filp->f_ops->direct_IO", "child": "blkdev_direct_IO" },
+
+		{ "name": "blkdev_direct_IO",
+		  "children": [
+				"__blkdev_direct_IO_simple",
+				"__blkdev_direct_IO",
+				"__blkdev_direct_IO_async"
+		  ]
+		}
+	]
+}
+
+
