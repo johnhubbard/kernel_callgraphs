@@ -52,14 +52,22 @@
 
         { "name": "filp->f_ops->direct_IO", "child": "blkdev_direct_IO" },
 
-		{ "name": "blkdev_direct_IO",
-		  "children": [
-				"__blkdev_direct_IO_simple",
-				"__blkdev_direct_IO",
-				"__blkdev_direct_IO_async"
+        { "name": "blkdev_direct_IO",
+          "children": [
+                        "__blkdev_direct_IO_simple",
+                        "__blkdev_direct_IO",
+                        "__blkdev_direct_IO_async"
+          ]
+        },
+
+        {"name": "submit_page_section",
+		 "parents": [
+			"dio_zero_block",
+			"do_direct_IO"
 		  ]
-		}
-	]
+	}
+
+        ]
 }
 
 
