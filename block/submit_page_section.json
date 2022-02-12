@@ -1,11 +1,11 @@
 {
     "items": [
         {"name": "submit_page_section",
-		 "parents": [
-			"dio_zero_block",
-			"do_direct_IO"
-		  ]
-		},
+         "parents": [
+            "dio_zero_block",
+            "do_direct_IO"
+          ]
+        },
 
         { "name": "do_blockdev_direct_IO", "child": "do_direct_IO" },
         { "name": "do_blockdev_direct_IO", "child": "dio_zero_block" },
@@ -16,7 +16,7 @@
         { "name": "get_page(ZERO_PAGE)", "child": "bio_vec pool", "color": "deeppink" },
         { "name": "get_page_pages_fast", "child": "bio_vec pool", "color": "deeppink" }
 
-	]
+    ]
 }
 
 

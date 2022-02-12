@@ -9,7 +9,7 @@
         { "name": "iomap_dio_bio_iter", "child": "iomap_dio_zero", "color": "yellow" },
         { "name": "iomap_dio_zero", "child": "get_page(ZERO_PAGE)", "color": "yellow" },
 
-		{ "name": "generic_file_write_iter", "child": "generic_file_direct_write" },
+        { "name": "generic_file_write_iter", "child": "generic_file_direct_write" },
         { "name": "generic_file_direct_write", "child": "mapping->a_ops->direct_IO" },
         { "name": "mapping->a_ops->direct_IO", "child": "affs_direct_IO, ...etc\n(many filesystems)" },
         { "name": "affs_direct_IO, ...etc\n(many filesystems)", "child": "blockdev_direct_IO" },
@@ -26,24 +26,24 @@
 
         { "name": "block_device_operations->ioctl", "child": "blk_rq_map_user_iov" },
         { "name": "blk_rq_map_user_iov", "child": "bio_map_user_iov" },
-		{ "name": "bio_map_user_iov", "child": "iov_iter_get_pages_alloc" },
-		{ "name": "iov_iter_get_pages_alloc", "child": "get_page_pages_fast" },
+        { "name": "bio_map_user_iov", "child": "iov_iter_get_pages_alloc" },
+        { "name": "iov_iter_get_pages_alloc", "child": "get_page_pages_fast" },
 
         { "name": "do_direct_IO", "child": "dio_zero_block" },
         { "name": "dio_zero_block", "child": "get_page(ZERO_PAGE)" },
         { "name": "get_page(ZERO_PAGE)", "child": "bio_vec pool", "color": "deeppink" },
         { "name": "get_page_pages_fast", "child": "bio_vec pool", "color": "deeppink" },
 
-		{ "name": "bio_iov_iter_get_pages",
-		  "parents": [
-				"__blkdev_direct_IO_simple",
-				"__blkdev_direct_IO",
-				"__blkdev_direct_IO_async",
-				"zonefs_file_dio_append",
-				"iomap_dio_bio_iter"
-		  ],
-		  "child": "__bio_iov_iter_get_pages"
-		},
+        { "name": "bio_iov_iter_get_pages",
+          "parents": [
+                "__blkdev_direct_IO_simple",
+                "__blkdev_direct_IO",
+                "__blkdev_direct_IO_async",
+                "zonefs_file_dio_append",
+                "iomap_dio_bio_iter"
+          ],
+          "child": "__bio_iov_iter_get_pages"
+        },
 
         { "name": "__bio_iov_iter_get_pages", "child": "iov_iter_get_pages" },
         { "name": "__iter_get_bvecs, etc\n(many routines)", "child": "iov_iter_get_pages" },
@@ -61,11 +61,11 @@
         },
 
         {"name": "submit_page_section",
-		 "parents": [
-			"dio_zero_block",
-			"do_direct_IO"
-		  ]
-	}
+         "parents": [
+            "dio_zero_block",
+            "do_direct_IO"
+          ]
+    }
 
         ]
 }
