@@ -1,0 +1,59 @@
+{
+    "items": [
+        { "name": "IDTENTRY exc_page_fault", "child": "handle_page_fault" },
+        { "name": "handle_page_fault", "child": "do_user_addr_fault (x86)" },
+
+        { "name": "handle_mm_fault", "parents":
+                                    ["do_user_addr_fault (x86)",
+                                     "do_exception (other arches...)",
+                                     "faultin_page (mm/gup.c)",
+                                     "hmm_vma_fault",
+                                     "break_ksm",
+                                     "fixup_user_fault  (mm/gup.c)"],
+                  "color": "green" },
+
+        { "name": "__get_user_pages", "child": "faultin_page (mm/gup.c)",
+                  "color": "deeppink" },
+        { "name": "hmm_vma_fault", "color": "deeppink" },
+
+        { "name": "handle_mm_fault", "child": "__handle_mm_fault" },
+
+        { "name": "__handle_mm_fault", "children":
+                                      ["create_huge_pud",
+                                       "create_huge_pmd",
+                                       "handle_pte_fault"] },
+
+        { "name": "handle_pte_fault", "children":
+                                     ["do_anonymous_page",
+                                      "do_fault",
+                                      "do_swap_page",
+                                      "do_numa_page",
+                                      "do_wp_page"] },
+        { "name": "do_fault", "children":
+                                      ["do_read_fault",
+                                       "do_cow_fault",
+                                       "do_shared_fault"],
+                  "color": "orange" },
+
+        { "name": "__do_fault", "parents":
+                               ["do_read_fault",
+                                "do_cow_fault",
+                                "do_shared_fault"],
+                  "color": "orange" },
+
+
+        { "name": "do_anonymous_page", "child": "pte_alloc",
+                                       "color": "yellow"},
+        { "name": "pte_alloc", "child": "__pte_alloc" },
+
+        { "name": "__pte_alloc", "child": "pte_alloc_one" },
+        { "name": "__pte_alloc", "child": "pmd_install" },
+
+        { "name": "pte_alloc_one", "child": "__pte_alloc_one" },
+
+        { "name": "__pte_alloc_one", "children":
+                                    ["alloc_page",
+                                     "pgtable_pte_page_ctor"] }
+    ]
+}
+
