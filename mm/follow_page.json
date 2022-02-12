@@ -6,6 +6,8 @@
                 "munlock_vma_pages_range\ndo_pages_stat_array (migrate.c)\nadd_page_for_migration (migrate.c)\nsplit_huge_pages_pid\nscan_get_next_rmap_item (ksm)\nget_mergeable_page (ksm)\nbreak_ksm (ksm)\ngmap_make_secure (s390)\ndo_secure_storage_access (s390)\n"
                 ]
         },
+        { "name": "__get_user_pages", "child": "faultin_page (mm/gup.c)",
+          "color": "deeppink" },
 
         { "name": "__get_user_pages", "child": "follow_page_mask" },
         { "name": "follow_page",      "child": "follow_page_mask" },
