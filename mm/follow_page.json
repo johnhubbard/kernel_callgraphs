@@ -24,21 +24,15 @@
         },
         { "name": "__get_user_pages_locked",
             "parents": [
-                "pin_user_pages_locked",
                 "get_user_pages_unlocked",
-                "get_user_pages_locked",
                 "__get_user_pages_remote",
                 "__gup_longterm_locked",
                 "get_dump_page",
                 "fault_in_safe_writeable"
             ]
         },
-        { "name": "NO CALLERS",  "child": "pin_user_pages_locked" },
-        { "name": "lookup_node", "child": "get_user_pages_locked" },
-
+        { "name": "lookup_node", "child": "get_user_pages_fast" },
         { "name": "follow_pfn_pte", "parent": "follow_page_pte", "color": "yellow" },
-        { "name": "pin_user_pages_locked", "color": "deeppink" },
-        { "name": "get_user_pages_locked", "color": "deeppink" },
 
         { "name": "__gup_longterm_locked",
             "parents": [
@@ -46,7 +40,8 @@
                 "get_user_pages",
                 "__gup_longterm_unlocked",
                 "__get_user_pages_remote"
-            ]
+            ],
+          "color": "yellow"
         },
         { "name": "internal_get_user_pages_fast", "child": "__gup_longterm_unlocked" },
 
@@ -56,7 +51,8 @@
                 "pin_user_pages_fast_only",
                 "get_user_pages_fast",
                 "get_user_pages_fast_only"
-            ]
+            ],
+          "color": "green"
         }
     ]
 }
