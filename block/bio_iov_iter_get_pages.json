@@ -3,7 +3,7 @@
         { "name": "vfs_iter_write", "child": "do_iter_write" },
         { "name": "do_iter_write", "child": "filp->f_ops->write_iter" },
         { "name": "filp->f_ops->write_iter", "child": "generic_file_write_iter" },
-        { "name": "filp->f_ops->write_iter", "child": "__iomap_dio_rw" },
+        { "name": "filp->f_ops->write_iter", "child": "ext4_file_write_iter" },
         { "name": "__iomap_dio_rw", "child": "iomap_dio_iter", "color": "yellow" },
         { "name": "iomap_dio_iter", "child": "iomap_dio_bio_iter", "color": "yellow" },
         { "name": "iomap_dio_bio_iter", "child": "iomap_dio_zero", "color": "yellow" },
@@ -11,9 +11,29 @@
 
         { "name": "generic_file_write_iter", "child": "generic_file_direct_write" },
         { "name": "generic_file_direct_write", "child": "mapping->a_ops->direct_IO" },
-        { "name": "mapping->a_ops->direct_IO", "child": "affs_direct_IO, ...etc\n(many filesystems)" },
-        { "name": "affs_direct_IO, ...etc\n(many filesystems)", "child": "blockdev_direct_IO" },
-        { "name": "blockdev_direct_IO", "child": "__blockdev_direct_IO" },
+
+        { "name": "mapping->a_ops->direct_IO",
+                  "children": ["affs_direct_IO\nexfat_direct_IO",
+                               "ext2_direct_IO\nfat_direct_IO",
+                               "hfs_direct_IO\nhfsplus_direct_IO",
+                               "jfs_direct_IO\nnilfs_direct_IO",
+                               "ntfs_direct_IO\nreiserfs_direct_IO",
+                               "udf_direct_IO\nocfs2_direct_IO",
+                               "blkdev_direct_IO"
+           ]},
+
+
+        { "name": "blockdev_direct_IO", "child": "__blockdev_direct_IO",
+                  "color": "#b5b5ff" },
+
+        { "name": "blockdev_direct_IO",
+                  "parents":  ["affs_direct_IO\nexfat_direct_IO",
+                               "ext2_direct_IO\nfat_direct_IO",
+                               "hfs_direct_IO\nhfsplus_direct_IO",
+                               "jfs_direct_IO\nnilfs_direct_IO",
+                               "ntfs_direct_IO\nreiserfs_direct_IO",
+                               "udf_direct_IO\nocfs2_direct_IO"
+                   ]},
         { "name": "__blockdev_direct_IO", "child": "do_blockdev_direct_IO" },
         { "name": "do_blockdev_direct_IO", "child": "do_direct_IO" },
         { "name": "do_blockdev_direct_IO", "child": "dio_zero_block" },
@@ -21,18 +41,16 @@
 
         { "name": "dio_get_page", "child": "dio_refill_pages" },
         { "name": "dio_refill_pages", "child": "get_page(ZERO_PAGE)" },
-        { "name": "dio_refill_pages", "child": "iov_iter_get_pages" },
-        { "name": "iov_iter_get_pages", "child": "get_page_pages_fast" },
+        { "name": "iov_iter_get_pages", "child": "get_user_pages_fast" },
 
         { "name": "block_device_operations->ioctl", "child": "blk_rq_map_user_iov" },
         { "name": "blk_rq_map_user_iov", "child": "bio_map_user_iov" },
-        { "name": "bio_map_user_iov", "child": "iov_iter_get_pages_alloc" },
-        { "name": "iov_iter_get_pages_alloc", "child": "get_page_pages_fast" },
+        { "name": "iov_iter_get_pages_alloc", "child": "get_user_pages_fast" },
 
         { "name": "do_direct_IO", "child": "dio_zero_block" },
         { "name": "dio_zero_block", "child": "get_page(ZERO_PAGE)" },
         { "name": "get_page(ZERO_PAGE)", "child": "bio_vec pool", "color": "deeppink" },
-        { "name": "get_page_pages_fast", "child": "bio_vec pool", "color": "deeppink" },
+        { "name": "get_user_pages_fast", "child": "bio_vec pool", "color": "green" },
 
         { "name": "bio_iov_iter_get_pages",
           "parents": [
@@ -45,10 +63,22 @@
           "child": "__bio_iov_iter_get_pages"
         },
 
-        { "name": "__bio_iov_iter_get_pages", "child": "iov_iter_get_pages" },
-        { "name": "__iter_get_bvecs, etc\n(many routines)", "child": "iov_iter_get_pages" },
+        { "name": "iov_iter_get_pages",
+                  "color": "green",
+                  "parents": ["__bio_iov_iter_get_pages",
+                              "dio_refill_pages",
+                              "__bio_iov_append_get_pages\n__iter_get_bvecs\n__zerocopy_sg_from_iter\naf_alg_make_sg",
+                              "rds_message_zcopy_from_user\n(cifs) setup_aio_ctx_iter\nvhost_scsi_map_to_sgl\nsk_msg_zerocopy_from_iter",
+                              "iter_to_pipe\ntls_setup_from_iter\nfuse_copy_fill\nfuse_get_user_pages"
+                              ]},
 
-        { "name": "ceph_netfs_issue_op, etc\n(many routines)", "child": "iov_iter_get_pages_alloc" },
+        { "name": "iov_iter_get_pages_alloc",
+                  "color": "green",
+                  "parents": ["bio_map_user_iov",
+                              "ceph_netfs_issue_op",
+                              "nfs_direct_[read|write]_schedule_iovec\np9_get_mapped_pages",
+                              "cifs_write_from_iter\ncifs_send_async_read"
+                              ]},
 
         { "name": "filp->f_ops->direct_IO", "child": "blkdev_direct_IO" },
 
@@ -61,11 +91,37 @@
         },
 
         {"name": "submit_page_section",
-         "parents": [
-            "dio_zero_block",
-            "do_direct_IO"
-          ]
-    }
+                 "parents": [
+                    "dio_zero_block",
+                    "do_direct_IO"
+                  ],
+                  "children": ["get_page\nput_page",
+                               "dio_bio_submit",
+                               "dio_send_cur_page"]},
+
+        { "name": "iomap_dio_rw", "child": "filemap_write_and_wait_range",
+                  "color": "yellow" },
+        { "name": "filemap_write_and_wait_range", "child": "do_writepages" },
+        { "name": "do_writepages", "child": "mapping->a_ops->writepages" },
+        { "name": "mapping->a_ops->writepages", "child": "ext4_writepages" },
+
+        { "name": "ext4_writepages", "child": "BUG_ON(PageWriteback(page))" },
+        { "name": "BUG_ON(PageWriteback(page))"},
+
+        { "name": "iomap_dio_rw", "child": "iomap_dio_complete" },
+        { "name": "iomap_dio_rw", "child": "__iomap_dio_rw" },
+        { "name": "iomap_dio_rw",
+          "parents": ["erofs_file_read_iter\n\nbtrfs_direct_read\nbtrfs_direct_write",
+                      "ext4_dio_read_iter\n\ngfs2_file_direct_read\ngfs2_file_direct_write",
+                      "zonefs_file_dio_write\nzonefs_file_read_iter\n\nxfs_file_dio_read\nxfs_file_dio_write_[un]aligned",
+                      "ext4_dio_write_iter"
+                      ]},
+
+        { "name": "ext4_file_write_iter", "child": "ext4_dio_write_iter" },
+
+        { "name": "dio_send_cur_page", "child": "dio_bio_submit" },
+        { "name": "do_blockdev_direct_IO", "child": "dio_send_cur_page"},
+        { "name": "do_blockdev_direct_IO", "child": "dio_bio_submit" }
 
         ]
 }
