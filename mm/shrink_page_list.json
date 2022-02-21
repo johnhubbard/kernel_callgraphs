@@ -1,0 +1,21 @@
+{
+    "items": [
+        { "name": "try_to_unmap", "child": "try_to_unmap_one" },
+
+        { "name": "try_to_unmap",
+                  "parents": ["unmap_page (huge_memory.c)",
+                              "collapse_file\n(khugepaged.c)",
+                              "hwpoison_user_mappings",
+                              "do_migrate_range\n(memory_hotplug.c)",
+                              "shrink_page_list"],
+                  "color": "green" },
+
+        { "name": "shrink_page_list",
+                  "children": ["",
+                                "",
+                                ""
+                              ]}
+
+    ]
+}
+
