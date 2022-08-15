@@ -1,9 +1,9 @@
 {
     "items": [
         { "name": "vfs_iter_write", "child": "do_iter_write" },
-        { "name": "do_iter_write", "child": "filp->f_ops->write_iter" },
-        { "name": "filp->f_ops->write_iter", "child": "generic_file_write_iter" },
-        { "name": "filp->f_ops->write_iter", "child": "ext4_file_write_iter" },
+        { "name": "do_iter_write", "child": "filp->f_op->write_iter" },
+        { "name": "filp->f_op->write_iter", "child": "generic_file_write_iter" },
+        { "name": "filp->f_op->write_iter", "child": "ext4_file_write_iter" },
         { "name": "__iomap_dio_rw", "child": "iomap_dio_iter", "color": "yellow" },
         { "name": "iomap_dio_iter", "child": "iomap_dio_bio_iter", "color": "yellow" },
         { "name": "iomap_dio_bio_iter", "child": "iomap_dio_zero", "color": "yellow" },
@@ -80,7 +80,7 @@
                               "cifs_write_from_iter\ncifs_send_async_read"
                               ]},
 
-        { "name": "filp->f_ops->direct_IO", "child": "blkdev_direct_IO" },
+        { "name": "filp->f_op->direct_IO", "child": "blkdev_direct_IO" },
 
         { "name": "blkdev_direct_IO",
           "children": [
