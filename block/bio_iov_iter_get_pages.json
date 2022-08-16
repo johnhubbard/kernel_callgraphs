@@ -63,21 +63,32 @@
           "child": "__bio_iov_iter_get_pages"
         },
 
+        { "name": "(NET) tls_sw_sendmsg", "child": "sk_msg_zerocopy_from_iter" },
+
+        { "name": "(NET) tun_get_user", "child": "zerocopy_sg_from_iter" },
+        { "name": "zerocopy_sg_from_iter", "child": "__zerocopy_sg_from_iter" },
+
+        { "name": "io_sg_from_iter", "child": "__zerocopy_sg_from_iter" },
+        { "name": "skb_zerocopy_iter_dgram", "child": "__zerocopy_sg_from_iter" },
+        { "name": "(IO_URING) io_sg_from_iter", "child": "__zerocopy_sg_from_iter" },
+
+        { "name": "VHOST_SCSI", "child": "vhost_scsi_map_to_sgl" },
+
         { "name": "iov_iter_get_pages",
                   "color": "green",
                   "parents": ["__bio_iov_iter_get_pages",
                               "dio_refill_pages",
-                              "__bio_iov_append_get_pages\n__iter_get_bvecs\n__zerocopy_sg_from_iter\naf_alg_make_sg",
-                              "rds_message_zcopy_from_user\n(cifs) setup_aio_ctx_iter\nvhost_scsi_map_to_sgl\nsk_msg_zerocopy_from_iter",
-                              "iter_to_pipe\ntls_setup_from_iter\nfuse_copy_fill\nfuse_get_user_pages"
+                              "sk_msg_zerocopy_from_iter",
+                              "vhost_scsi_map_to_sgl",
+                              "__zerocopy_sg_from_iter",
+                              "CIFS\nCEPH_FS\nRDS\nCRYPTO_USER_API\nTLS\n",
+                              "iter_to_pipe"
                               ]},
 
         { "name": "iov_iter_get_pages_alloc",
                   "color": "green",
                   "parents": ["bio_map_user_iov",
-                              "ceph_netfs_issue_op",
-                              "nfs_direct_[read|write]_schedule_iovec\np9_get_mapped_pages",
-                              "cifs_write_from_iter\ncifs_send_async_read"
+                              "NFS_DIRECT\n9P_FS\nCIFS\nCEPH_FS"
                               ]},
 
         { "name": "filp->f_op->direct_IO", "child": "blkdev_direct_IO" },
